@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/boxicons/2.0.7/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Your+Selected+Font1&family=Your+Selected+Font2&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+
+    <title>Portfolio</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        /* font-family: 'Poppins',sans-serif; */
+        font-family: 'Roboto', sans-serif;
+
+    }
+    body{
+        background: #081b29;
+        color: #ededed;
+
+        /* navbar style start  */
+    
+    }
+    .header{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 10%;
+        background: transparent;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;     
+    }
+    .logo{
+        position: relative;
+        font-size: 25px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .logo::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        /* left: 0; */
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: #081b29;
+        animation: showRight 1s ease forwards;
+        animation-delay: .4s;
+    }
+/*Keyframe animation*/
+@keyframes showRight {
+    100%{
+        width: 0;
+    }
+}
+.navbar a{
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 35px;
+    transition: .3s;
+}
+.navbar a:hover, .navbar a.active{
+    color: #00abf0;
+}
+/* navbar style ends here */
+
+/* section style starts from here  */
+
+    /* home part style starts from here  */
+.home{
+    height: 100vh;
+    background: url(home.jpg) no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+    /* padding-bottom: 60px; */
+}
+
+.home-content{
+    background-color: transparent;
+    max-width: 600px;
+}
+.home-content h1{
+    position: relative;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.home-content h1::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        /* left: 0; */
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: #081b29;
+        animation: showRight 1s ease forwards;
+        animation-delay: 1s;
+    }
+.home-content h3{
+    position: relative;
+    font-size: 36px;
+    font-weight: 700;
+    color: aqua;
+}
+
+.home-content h3::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        /* left: 0; */
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: #081b29;
+        animation: showRight 1s ease forwards;
+        animation-delay: 1.4s;
+    }
+.home-content p{
+    position: relative;
+    font-size: 16px;
+    margin: 20px 0 40px;
+}
+
+
+.home-content p::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        /* left: 0; */
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: #081b29;
+        animation: showRight 1s ease forwards;
+        animation-delay: 1.6s;
+    }
+    /* home part ends here  */
+
+    /* button style in home part of section starts from here  */
+.home-content .btn-box{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 345px;
+    height: 50px;
+    background-color: transparent;
+}
+
+.home-content .btn-box::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        /* left: 0; */
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background:#081b29;
+        z-index: 2;
+        animation: showRight 1s ease forwards;
+        animation-delay: 1.9s;
+    }
+.btn-box a{
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 100%;
+    background: #00abf0;
+    border: 2px solid #00abf0;
+    border-radius: 8px;
+    font-size: 19px;
+    color: #081b29;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+    z-index: 1;
+    overflow: hidden;
+    transition: .5s;
+}
+
+.btn-box a:hover{
+    color: #00abf0;
+}
+.btn-box a:nth-child(2){
+    background: transparent;
+    color: #00abf0;
+}
+.btn-box a:nth-child(2):hover{
+    /* background: #081b29; */
+    color: #081b29;
+}
+.btn-box a:nth-child(2)::before{
+    background: #00abf0;
+}
+
+.btn-box a::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #081b29;
+    z-index: -1;
+    transition: .5s;
+}
+.btn-box a:hover::before{
+    width: 100%;
+}
+    /* button style in home part of section end here  */
+
+    /* icon style starts from here */
+
+    .home-sci{
+        position: absolute;
+        bottom: 40px;
+        width: auto;
+        background:transparent;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .home-sci::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        /* left: 0; */
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background:#081b29;
+        z-index: 2;
+        animation: showRight 1s ease forwards;
+        animation-delay: 2.5s;
+    }
+    .home-sci a{
+        position: relative;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background:transparent;
+        border: 2px solid #00abf0;
+        border-radius: 50%;
+        font-size: 20px;
+        color: #00abf0;
+        text-decoration: none;
+        margin-right: 10px;
+        z-index: 1;
+        overflow: hidden;
+        transition: .5s;
+    }
+    .home-sci a:hover{
+        color: #081b29;
+    }
+
+    /* .home-sci a:last-child {
+    margin-right: 0;
+    } */
+    .home-sci a::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background: #00abf0;
+        z-index: -1;
+        transition: .5s;
+    }
+    .home-sci a:hover::before{
+        width: 100%;
+    }
+
+    /* icon style ends here */
+    .home-imgHover{
+        position: absolute;
+        top: 0;
+        right: 30px;
+        width: 500px;
+        height: 100%;
+        background: transparent;
+        /* border: 2px solid red; */
+        transition: 3s;
+        animation: manipActiveHover .1s forwards;
+        animation-delay: 4s;
+        pointer-events: none;
+}
+/*keyframe animation*/
+@keyframes manipActiveHover {
+    100% {
+        pointer-events: auto;
+    }
+}
+.home-imgHover::after{
+        content: '';
+        position: absolute;
+        top: 0;
+        /* left: 0; */
+        right: 0;
+        width: 120%;
+        height: 100%;
+        background: #081b29;
+        z-index: 100;
+        animation: showRight 1s ease forwards;
+        animation-delay: 3s;
+    }
+
+.home-imgHover:hover{
+    background: #081b29; /*to be change to */
+    opacity: .8;
+}
+
+
+
+
+
+/* @media (min-width: 768px) {
+            .logo {
+                font-size: 32px;
+            }
+            .navbar a {
+                font-size: 18px;
+                margin-left: 25px;
+            }
+            .home-content h1 {
+                font-size: 48px;
+            }
+            .home-content h3 {
+                font-size: 32px;
+            }
+            .home-content p {
+                font-size: 18px;
+            }
+            .btn-box {
+                flex-direction: row;
+            }
+            .btn-box a {
+                width: auto;
+            }
+            .home-sci {
+                justify-content: flex-end;
+            }
+        } */
+</style>
+<body>
+    <!--navbar starts -->
+    <header class="header">
+        <a href="#" class="logo">Ankush</a>
+        <nav class="navbar">
+            <a href="ankush.html" class="active">Home</a>
+            <a href="about.html">About</a>
+            <a href="skills.html">Skills</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+    <!--navbar finish -->
+
+
+    <!--Section starts-->
+
+    <section class="home">
+        <div class="home-content">
+            <h1>Hi, I'm Ankush</h1>
+            <h3>Security Researcher</h3>
+            <p>A Junior Security Researcher with an Ethical mindset, Currently working for Cyber safety , cyber crime awareness. 
+                I had hands-on experience on Linux, Network Security, Web and also had experience with tools like Burp suite, Owasp zap, Acunetix, Nessus, Nmap, Nikto, Metasploit, and other open-source tools.
+            </p>
+            <div class="btn-box">
+                <a href="#">Hire me</a>
+                <a href="#">Let's Talk</a>
+            </div>
+        </div>
+
+        <div class="home-sci">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.linkedin.com/in/mrrobot-h4ck3r"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.twitter.com/mrrobot_h4ck3r"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/mrrobot_h4ck3r"><i class="fab fa-instagram"></i></a>
+            <a href="https://github.com/mrrobot-h4ck3r"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+            <a href=""><i class="fab fa-telegram"></i></a>
+        </div>
+       
+        <span class="home-imgHover"></span>
+
+       
+    </section>
+</body>
+</html>
