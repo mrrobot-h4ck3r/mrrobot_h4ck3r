@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/boxicons/2.0.7/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Your+Selected+Font1&family=Your+Selected+Font2&display=swap"
+        rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Add your meta tags, links to stylesheets, and title here -->
+    <title>About Me - Ankush's Portfolio</title>
+    <style>
+        /* Your existing styles ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* font-family: 'Poppins',sans-serif; */
+            font-family: 'Roboto', sans-serif;
+
+        }
+
+        body {
+            background: #081b29;
+            color: #ededed;
+        }
+
+        /* navbar style start  */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 10%;
+            background: transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            position: relative;
+            font-size: 25px;
+            color: white;
+            /* background: url(Screenshot\ 2023-09-12\ at\ 13-09-46\ Pixel\ Tech\ Software\ Logo.png) no-repeat; */
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            /* left: 0; */
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: #081b29;
+            animation: showRight 1s ease forwards;
+            animation-delay: .4s;
+        }
+
+        /*Keyframe animation*/
+        @keyframes showRight {
+            100% {
+                width: 0;
+            }
+        }
+
+        .navbar a {
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 35px;
+            transition: .3s;
+        }
+
+        .navbar a:hover,
+        .navbar a.active {
+            color: #00abf0;
+        }
+
+        /* navbar style ends here */
+
+        .about {
+            padding: 100px 10%;
+            color: #ededed;
+        }
+
+        .about-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .about-content p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Customize additional styles as needed for the "About" page */
+    </style>
+</head>
+
+<body>
+    <!-- Navbar (similar to your existing code) -->
+    <header class="header">
+        <!-- Navbar content ... -->
+
+        <a href="#" class="logo">mrrobot_h4ck3r</a>
+        <nav class="navbar">
+            <a href="ankush.html">Home</a>
+            <a href="about.html" class="active">About</a>
+            <a href="Skills.html">Skills</a>
+            <a href="Education.html">Education</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <!-- About Me content -->
+    <section class="about">
+        <div class="about-content">
+            <h2>About Me</h2>
+            <p>I am Ankush, a junior security researcher with a strong passion for cybersecurity. I am dedicated to
+                ensuring cyber safety and raising awareness about cybercrime. My expertise lies in Linux, network
+                security, and web technologies. I have hands-on experience with various security tools such as Burp
+                Suite, OWASP ZAP, Acunetix, Nessus, Nmap, Nikto, Metasploit, and other open-source tools.</p>
+            <!-- Add more information about yourself as needed -->
+        </div>
+    </section>
+</body>
+
+</html>
