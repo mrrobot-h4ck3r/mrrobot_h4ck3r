@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Add your meta tags, links to stylesheets, and title here -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/boxicons/2.0.7/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Your+Selected+Font1&family=Your+Selected+Font2&display=swap"
+        rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+    <title>Contact Me - Ankush's Portfolio</title>
+    <style>
+        /* Your existing styles ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* font-family: 'Poppins',sans-serif; */
+            font-family: 'Roboto', sans-serif;
+
+        }
+
+        body {
+            background: #081b29;
+            color: #ededed;
+        }
+
+        /* navbar style start  */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 10%;
+            background: transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            position: relative;
+            font-size: 25px;
+            color: white;
+            /* background: url(Screenshot\ 2023-09-12\ at\ 13-09-46\ Pixel\ Tech\ Software\ Logo.png) no-repeat; */
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            /* left: 0; */
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: #081b29;
+            animation: showRight 1s ease forwards;
+            animation-delay: .4s;
+        }
+
+        /*Keyframe animation*/
+        @keyframes showRight {
+            100% {
+                width: 0;
+            }
+        }
+
+        .navbar a {
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 35px;
+            transition: .3s;
+        }
+
+        .navbar a:hover,
+        .navbar a.active {
+            color: #00abf0;
+        }
+
+        /* navbar style ends here */
+
+        .contact {
+            padding: 100px 10%;
+            color: #ededed;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-content h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .contact-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .contact-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-content ul li {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .contact-content ul a {
+            /* justify-content: space-between; */
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .contact-content home-sci {
+            position: absolute;
+            bottom: 40px;
+            width: auto;
+            background: transparent;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .contact-content home-sci::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            /* left: 0; */
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: #081b29;
+            z-index: 2;
+            animation: showRight 1s ease forwards;
+            animation-delay: 2.5s;
+        }
+
+        .contact-content home-sci a {
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: 2px solid #00abf0;
+            border-radius: 50%;
+            font-size: 20px;
+            color: #00abf0;
+            text-decoration: none;
+            margin-right: 10px;
+            z-index: 1;
+            overflow: hidden;
+            transition: .5s;
+        }
+
+        .contact-content home-sci a:hover {
+            color: #081b29;
+        }
+
+        /* .home-sci a:last-child {
+    margin-right: 0;
+    } */
+        .contact-content home-sci a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: #00abf0;
+            z-index: -1;
+            transition: .5s;
+        }
+
+        .contact-content home-sci a:hover::before {
+            width: 100%;
+        }
+
+        /* Customize additional styles as needed for the "Contact" page */
+    </style>
+</head>
+
+<body>
+    <!-- Navbar (similar to your existing code) -->
+
+    <!-- Navbar content ... -->
+    <!--navbar starts -->
+    <header class="header">
+        <a href="#" class="logo">mrrobot_h4ck3r</a>
+        <nav class="navbar">
+            <a href="ankush.html">Home</a>
+            <a href="new_about.html">About</a>
+            <a href="skills.html">Skills</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="new_contact.html" class="active">Contact</a>
+        </nav>
+    </header>
+    <!--navbar finish -->
+
+
+    <!-- Contact Me content -->
+    <section class="contact">
+        <div class="contact-content">
+            <h2>Contact Me</h2>
+            <p>Feel free to reach out to me through the following contact details:</p>
+            <ul>
+                <li>Email: hanonymous985@gmail.com</li>
+                <li>Phone: +91 8869088124</li>
+                <!-- Add more contact information as needed -->
+            </ul>
+            <div class="home-sci">
+                <!-- <a href="#"><i class="fab fa-facebook"></i></a> -->
+                <a href="https://www.linkedin.com/in/mrrobot-h4ck3r"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.twitter.com/mrrobot_h4ck3r"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/mrrobot_h4ck3r"><i class="fab fa-instagram"></i></a>
+                <!-- <a href="https://github.com/mrrobot-h4ck3r"><i class="fab fa-github"></i></a> -->
+                <!-- <a href="#"><i class="fab fa-discord"></i></a>
+                <a href=""><i class="fab fa-telegram"></i></a> -->
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
