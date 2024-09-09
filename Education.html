@@ -1401,7 +1401,6 @@ jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//&lt;/stYle
         </ul>
     </div>
 </div>
-            
 
 <!-- Sensitive Data Exposure Category -->
 <div class="category">
@@ -1443,6 +1442,7 @@ jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//&lt;/stYle
         </ul>
     </div>
 </div>
+
 <!-- SSRF Category -->
 <div class="category">
     <h3><input type="checkbox" id="ssrf">15 > Server Side Request Forgery (SSRF)</h3>
@@ -1527,7 +1527,7 @@ vulnerablesite.com/file/?url=http://clmppw.dnslog.cn</code></pre>
     </div>
 </div>
 
-            <!-- SQL Injection Vulnerabilities Category -->
+<!-- SQL Injection Vulnerabilities Category -->
 <div class="category">
     <h3><input type="checkbox" id="sql-injection-vulnerabilities">16 > SQL Injection Vulnerabilities</h3>
     <div class="subcategory">
@@ -1596,7 +1596,7 @@ pic.png;waitfor delay '0:0:5'--
     </div>
 </div>
 
-      <!-- Parameter Pollution Category -->
+        <!-- Parameter Pollution Category -->
 <div class="category">
     <h3><input type="checkbox" id="parameter-pollution">16 > Parameter Pollution</h3>
     <div class="subcategory">
@@ -1778,8 +1778,262 @@ cache-control: no-cache, private
     </div>
 </div>
 
+<!-- Rate Limit Bypass Category -->
+<div class="category">
+    <h3><input type="checkbox" id="rate-limit-bypass">17 > Rate Limit Bypass</h3>
+    <div class="subcategory">
+        <h4>1. Using Different Parameters</h4>
+        <p>Suppose rate limit is on signup, try to use variations such as:</p>
+        <pre>
+sign-up, Sign-up, SignUp
+        </pre>
+        <p align="center">
+            <img 
+                width="600"
+                height="400"
+                src="https://user-images.githubusercontent.com/63053441/120425626-d06f0180-c383-11eb-9fec-22fdfc9c474e.png"
+                alt="Different Parameters Example"
+            >
+        </p>
+        <p align="center">
+            <img 
+                width="600"
+                height="400"
+                src="https://user-images.githubusercontent.com/63053441/120425794-16c46080-c384-11eb-94db-643501b2eae9.png"
+                alt="Different Parameters Example"
+            >
+        </p>
+        <p><a href="https://huzaifa-tahir.medium.com/methods-to-bypass-rate-limit-5185e6c67ecd">Methods to Bypass Rate Limit</a></p>
 
+        <h4>2. Rate Limit Bypass Headers</h4>
+        <p>Most applications use <code>X-Forwarded-For</code> to identify the originating IP address of the client. Using headers like <code>X-Forwarded-For</code> multiple times can sometimes bypass rate limit protection.</p>
+        <pre>
+X-Forwarded: 127.0.0.1
+X-Forwarded-By: 127.0.0.1
+X-Forwarded-For: 127.0.0.1
+X-Forwarded-For-Original: 127.0.0.1
+X-Forwarded-For-Ip: 127.0.0.1
+X-Forwarded-Host: 127.0.0.1
+X-Forward-For: 127.0.0.1
+Forwarded: 127.0.0.1
+Forwarded-For: 127.0.0.1
+Forwarded-For-Ip: 127.0.0.1
+X-Originating-IP: 127.0.0.1
+X-Remote-IP: 127.0.0.1
+X-Remote-Addr: 127.0.0.1
+X-Client-IP: 127.0.0.1
+X-Host: 127.0.0.1
+X-True-Ip: 127.0.0.1
+
+IP Header 2x times Instead of One time. (Tip from Kiraak Boy)
+        </pre>
+        <p align="center">
+            <img 
+                width="600"
+                height="400"
+                src="https://user-images.githubusercontent.com/63053441/120426382-3d36cb80-c385-11eb-8da7-63a1bee081a0.png"
+                alt="Rate Limit Bypass Headers Example"
+            >
+        </p>
+        <p>Sometimes, you may see 20 requests per account; bypass it by using a different IP after 20 attempts.</p>
+        <p align="center">
+            <img 
+                width="600"
+                height="400"
+                src="https://user-images.githubusercontent.com/63053441/120426528-838c2a80-c385-11eb-8d79-3927c4c031c6.png"
+                alt="Rate Limit Bypass Example"
+            >
+        </p>
+        <p align="center">
+            <img 
+                width="600"
+                height="400"
+                src="https://user-images.githubusercontent.com/63053441/120427217-c39fdd00-c386-11eb-9e48-6e9079d50fa6.png"
+                alt="Rate Limit Bypass Example"
+            >
+        </p>
+
+        <h4>3. Rate Limit on OTP SMS</h4>
+        <ol>
+            <li>Capture the request.</li>
+            <li>Remove the country code <code>+91</code> to <code>[ ]</code></li>
+            <li>Modify the number from <code>xxxxx-xxxxx</code> to <code>+91 xxxxx-xxxxx</code></li>
+        </ol>
+
+        <h4>4. Adding Characters After Email or Mobile</h4>
+        <p>Add these characters after the email or mobile number:</p>
+        <pre>
+%00, %0d%0a, %09, %0C, %20 (white-space value), %0
+        </pre>
+        <p align="center">
+            <img 
+                width="600"
+                height="400"
+                src="https://user-images.githubusercontent.com/63053441/120427626-7708d180-c387-11eb-8db2-28e3d438313e.png"
+                alt="Adding Characters Example"
+            >
+        </p>
+
+        <h4>5. Adding Random Parameters</h4>
+        <p>Just by adding a random parameter (e.g., <code>?bypass</code>) at the end of the endpoint.</p>
+        <p align="center">
+            <img 
+                width="600"
+                height="400"
+                src="https://user-images.githubusercontent.com/63053441/120427012-63a93680-c386-11eb-85a0-ca3079c6ca4f.png"
+                alt="Random Parameters Example"
+            >
+        </p>
+        <p><a href="https://twitter.com/xchopath/status/1245402225788063744/photo/1">Example of Adding Random Parameters</a></p>
+
+        <h4>6. Changing User-Agents or/and Cookies</h4>
+        <p>Another method is to change user-agents or cookies to bypass rate limits.</p>
+    </div>
+</div>
+
+
+<!-- Password Reset Vulnerabilities Category -->
+<div class="category">
+    <h3><input type="checkbox" id="password-reset-vulnerabilities">18 > Password Reset Vulnerabilities</h3>
+    <div class="subcategory">
+        <h4>1. Password Reset Link Not Expiring</h4>
+        <p>When a user requests to change their password, they receive a password reset link. This link should expire after a certain period. If it does not expire and can be used multiple times, it is a vulnerability.</p>
+
+        <h5>First Scenario:</h5>
+        <ol>
+            <li>Go to <a href="https://site.com/users/forgotten_password">https://site.com/users/forgotten_password</a> and send the password reset link to your email.</li>
+            <li>Go to your email inbox, where you will see a reset token like this: <a href="https://site.com/users/new_password?reset_token=your-reset-token">https://site.com/users/new_password?reset_token=your-reset-token</a>. Click the link to change the password. You can use this link multiple times to reset the password.</li>
+        </ol>
+        <div class="impact">
+            <strong>Impact:</strong> Password Reset Link not expiring after changing the password. <a href="https://hackerone.com/reports/898841">More Info</a>
+        </div>
+
+        <h5>Second Scenario:</h5>
+        <ol>
+            <li>Go to <a href="https://infogram.com/forgot">https://infogram.com/forgot</a> and request a password reset link.</li>
+            <li>Don't use the link; keep it in your email inbox.</li>
+            <li>After some time, repeat step 1.</li>
+            <li>This time, use the password reset link obtained in step 3, i.e., the second link.</li>
+            <li>After changing the password, use the password reset link captured in step 1.</li>
+            <li>You’ll see that the password reset link is still valid even after the password change.</li>
+        </ol>
+        <div class="impact">
+            <strong>Impact:</strong> The reset password token from step 3 is still usable and did not expire. If a victim opens their email in a shared or compromised device and forgets to log out, the attacker can use the reset link to change the password. <a href="https://hackerone.com/reports/283550">More Info</a>
+        </div>
+
+        <h5>Third Scenario:</h5>
+        <ol>
+            <li>Create an account or use an existing one.</li>
+            <li>Confirm your email address.</li>
+            <li>Log out of your account and request a password reset code for your account.</li>
+            <li>Don't use the code that was sent to your email address.</li>
+            <li>In a new browser, log back into your account.</li>
+            <li>Go to account settings and change your password.</li>
+            <li>Now go to your email and check the password reset code requested in step 3.</li>
+            <li>Change your password using that reset code.</li>
+            <li>Your password has been changed. The reset code did not expire after changing the password.</li>
+        </ol>
+        <div class="impact">
+            <strong>Impact:</strong> The reset password token in step 3 is still usable. If a victim uses a shared or compromised device, an attacker can reset the password. <a href="https://hackerone.com/reports/948345">More Info</a>
+        </div>
+
+        <h5>Fourth Scenario:</h5>
+        <ol>
+            <li>Send the password reset link to your email.</li>
+            <li>Don't open the password link; copy it and paste it into any editor.</li>
+            <li>Open your account.</li>
+            <li>Go to your account settings.</li>
+            <li>Under account, find Account Overview.</li>
+            <li>Go to the Email and Password option and change the email and verify it.</li>
+            <li>After changing the email, go to the copied password reset link.</li>
+            <li>Change your password.</li>
+            <li>Your password has been changed.</li>
+        </ol>
+        <div class="impact">
+            <strong>Impact:</strong> An attacker can still change the password if the victim changes their email address. <a href="https://hackerone.com/reports/685007">More Info</a>
+        </div>
+
+        <h5>Fifth Scenario:</h5>
+        <ol>
+            <li>Attacker visits <a href="https://card.starbucks.com.sg/forgetPassword.php">https://card.starbucks.com.sg/forgetPassword.php</a> and enters their account's email.</li>
+            <li>The link is sent to the attacker's email inbox. The attacker clicks on the link while monitoring the request using Burp Suite.</li>
+            <li>The attacker then modifies the email parameter to the victim's email in the requests as shown in the images below.</li>
+            <li>Upon submitting the request, the victim's password will be changed to the desired password.</li>
+        </ol>
+        <div class="impact">
+            <strong>Impact:</strong> This attack does not require the victim to perform any actions and can lead to account takeover. The attacker can capture the session ID and potentially access the victim's personal information and Starbucks card. <a href="https://hackerone.com/reports/315879">More Info</a>
+        </div>
+
+        <h5>Sixth Scenario:</h5>
+        <ol>
+            <li>The web app sends a verification code to email before changing sensitive fields.</li>
+            <li>Intercept the request in Burp Suite and find the email parameter (e.g., email: victim@gmail.com) in the POST request.</li>
+            <li>Change the email to another email address (e.g., attacker@gmail.com).</li>
+            <li>Receive the verification code at the attacker's email address.</li>
+        </ol>
         
+        <h4>2. Password Reset Token Leak via Referer</h4>
+        <ol>
+            <li>Go to <a href="https://ucp.nordvpn.com/lost-password">https://ucp.nordvpn.com/lost-password</a></li>
+            <li>Enter your email and click on Reset Password.</li>
+            <li>Go to your email and click on the password reset link.</li>
+            <li>On the password reset page, click on the social media links below and capture the request using Burp Suite.</li>
+            <li>Check if the Referer header is leaking the password reset token.</li>
+        </ol>
+        <pre>
+GET /nordvpn/ HTTP/1.1
+Host: www.facebook.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,/;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://ucp.nordvpn.com/reset-password/7ac4b7c4654797e8f2a061676314b0959e7de179d33a73dfaa0152b1ec617f46/
+Cookie: fr=1oATYBf0BJ0DXndaC.AWV1Ag1KKbwlzMPBUI8vUz2NaP0.BduttV.ZM.F3B.0.0.BdwUoa.AWWnaTR3; sb=Vdu6XRBcBVULAbruWmZbgfPF; datr=Vdu6Xar5xVM18qIAfGd61Mh3; c_user=100003539320116; xs=4%3AcaHYJilvx4Lkqg%3A2%3A1572948495%3A6163%3A4671
+Upgrade-Insecure-Requests: 1
+        </pre>
+        <div class="impact">
+            <strong>Impact:</strong> If a user resets their password and then clicks on social media links, the Referer header may leak the password reset token, allowing an attacker to exploit this for CSRF attacks or account takeover. <a href="https://hackerone.com/reports/751581">More Info</a>
+        </div>
+
+        <h4>3. Password Reset Token Leak via Response</h4>
+        <ol>
+            <li>Send the password reset link request.</li>
+            <li>Intercept the response.</li>
+            <li>Check if the response includes the reset-password link.</li>
+        </ol>
+        <pre>
+Request:
+POST /access/forgotPassword HTTP/1.1
+Host: api.xprogram.com
+User-Agent: Mozilla
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Content-Type: application/json;charset=utf-8
+Referer: https://app.xprogram.com/account/forgot-password
+Content-Length: 52
+origin: https://app.xprogram.com
+Connection: keep-alive
+
+{"email":"victim@example.com","locale":"en","g-recaptcha-response":"03AIIIH7w84lgFA..."}
+        </pre>
+        <pre>
+Response:
+{
+  "status": "success",
+  "message": "Password reset email sent.",
+  "data": {
+    "link": "https://app.xprogram.com/reset-password?token=abcd1234"
+  }
+}
+        </pre>
+        <div class="impact">
+            <strong>Impact:</strong> Leaking the reset token in the response could allow an attacker to access it directly and perform unauthorized actions on the user's account. <a href="https://hackerone.com/reports/931287">More Info</a>
+        </div>
+
+    </div>
+</div>
+
     </main>
 </body>
 </html>
