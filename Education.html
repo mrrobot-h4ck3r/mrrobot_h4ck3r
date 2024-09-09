@@ -920,9 +920,10 @@ inurl:return_url</pre>
                     
                     <h5>3. XSS via JavaScript</h5>
                     <p>If redirection uses JavaScript, try:</p>
-                    <pre>< script>
+                    <b>use view page source to check what to use </b>
+                   <!-- <pre>< script>
 top.location.href='reflectedhere';
-</ script></pre>
+</ script></pre> -->
                     <p>Encode values correctly, using normal and double encoding:</p>
                     <pre>https://example.com/login?return=https://example.com/?returnurl=https%3A%2F%2Fwww.google.com%2F
 https://example.com/login?return=https%3A%2F%2Fexample.com%2F%3Freturnurl%3Dhttps%253A%252F%252Fwww.google.com%252F</pre>
